@@ -1,0 +1,13 @@
+{
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "apps",
+    "projects": {
+      "main": {
+        "type": "application",
+        "root": "apps/main",
+        "entryFile": "main",
+        "sourceRoot": "apps/main/src"
+      }
+    }
+  }
+  
