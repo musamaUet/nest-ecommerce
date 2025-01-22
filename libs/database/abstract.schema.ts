@@ -3,7 +3,6 @@ import { SchemaTypes, Types } from 'mongoose';
 
 @Schema()
 export class AbstractDocument {
-    //@ts-ignore
   @Prop({ type: SchemaTypes.ObjectId })
   _id: Types.ObjectId;
 }
