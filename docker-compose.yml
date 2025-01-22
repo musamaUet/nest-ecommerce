@@ -7,10 +7,9 @@ services:
     command: npm run start:dev orders
     env_file:
       - ./apps/orders/.env
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/ordersdb
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
       - billing
       - auth
       - rabbitmq
@@ -27,10 +26,9 @@ services:
     command: npm run start:dev billing
     env_file:
       - ./apps/billing/.env
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/billingdb
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
       - rabbitmq
       - auth
     volumes:
@@ -46,10 +44,9 @@ services:
       - '3001:3001'
     env_file:
       - ./apps/auth/.env
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/authdb
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -58,40 +55,3 @@ services:
     image: rabbitmq
     ports:
       - '5672:5672'
-  mongodb-primary:
-    image: docker.io/bitnami/mongodb:5.0
-    environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
-      - MONGODB_REPLICA_SET_MODE=primary
-      - MONGODB_ROOT_PASSWORD=password123
-      - MONGODB_REPLICA_SET_KEY=replicasetkey123
-    volumes:
-      - 'mongodb_master_data:/bitnami/mongodb'
-    ports:
-      - '27017:27017'
-
-  mongodb-secondary:
-    image: docker.io/bitnami/mongodb:5.0
-    depends_on:
-      - mongodb-primary
-    environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
-      - MONGODB_REPLICA_SET_MODE=secondary
-      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
-      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
-      - MONGODB_REPLICA_SET_KEY=replicasetkey123
-
-  mongodb-arbiter:
-    image: docker.io/bitnami/mongodb:5.0
-    depends_on:
-      - mongodb-primary
-    environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
-      - MONGODB_REPLICA_SET_MODE=arbiter
-      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
-      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
-      - MONGODB_REPLICA_SET_KEY=replicasetkey123
-
-volumes:
-  mongodb_master_data:
-    driver: local
