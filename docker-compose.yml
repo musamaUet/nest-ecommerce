@@ -7,8 +7,6 @@ services:
     command: npm run start:dev orders
     env_file:
       - ./apps/orders/.env
-    environment:
-      - MONGO_URI=mongodb://localhost:27017/ordersdb
     depends_on:
       - billing
       - auth
@@ -17,7 +15,8 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - '3000:3000'
+      - '${PORT}:3000'
+
   billing:
     build:
       context: .
@@ -26,32 +25,34 @@ services:
     command: npm run start:dev billing
     env_file:
       - ./apps/billing/.env
-    environment:
-      - MONGO_URI=mongodb://localhost:27017/billingdb
     depends_on:
       - rabbitmq
       - auth
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+
   auth:
     build:
       context: .
       dockerfile: ./apps/auth/Dockerfile
       target: development
     command: npm run start:dev auth
-    ports:
-      - '3001:3001'
     env_file:
       - ./apps/auth/.env
-    environment:
-      - MONGO_URI=mongodb://localhost:27017/authdb
     depends_on:
       - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    ports:
+      - '${PORT}:3001'
+
   rabbitmq:
     image: rabbitmq
     ports:
       - '5672:5672'
+
+volumes:
+  mongodb_master_data:
+    driver: local
