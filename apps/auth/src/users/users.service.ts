@@ -14,7 +14,6 @@ export class UsersService {
 
   async createUser(request: CreateUserRequest) {
     await this.validateCreateUserRequest(request);
-    //@ts-ignore
     const user = await this.usersRepository.create({
       ...request,
       password: await bcrypt.hash(request.password, 10),
