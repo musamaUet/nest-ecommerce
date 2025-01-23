@@ -2,6 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RmqService } from './rmq.service';
+import * as amqplib from 'amqplib';
 
 interface RmqModuleOptions {
   name: string;
@@ -19,7 +20,6 @@ export class RmqModule {
         ClientsModule.registerAsync([
           {
             name,
-            //@ts-ignore
             useFactory: (configService: ConfigService) => ({
               transport: Transport.RMQ,
               options: {
