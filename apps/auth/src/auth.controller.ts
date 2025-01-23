@@ -27,15 +27,11 @@ export class AuthController {
     @Body() userData: Partial<User>,
     @Res() response: Response,
   ) {
-    try {
       console.log('userData', userData);
       const user = await this.authService.register(userData);
-      response.status(200).json({ message: 'Manual response', payload: user });
-      // await this.authService.login(user, response);
-      // return response.send(user);
-    } catch(err) {
-      console.log('err', err);
-    }
+      // response.status(200).json({ message: 'Manual response', payload: user });
+      await this.authService.login(user, response);
+      return response.send(user);
   }
 
   @UseGuards(JwtAuthGuard)

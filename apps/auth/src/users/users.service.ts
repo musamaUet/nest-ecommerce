@@ -3,10 +3,10 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { CreateUserRequest } from './dto/create-user.request';
 import { User } from './schemas/user.schema';
+const bcrypt = require('bcryptjs');
 
 @Injectable()
 export class UsersService {
@@ -15,14 +15,9 @@ export class UsersService {
   async createUser(request: CreateUserRequest) {
     const validatedReq = await this.validateCreateUserRequest(request);
     try {
-      console.log('inside try');
-      // const user = await this.usersRepository.create({
-      //   ...request,
-      //   password: await bcrypt.hash(request.password, 10),
-      // });
       const user = await this.usersRepository.create({
         ...request,
-        password: "usama",
+        password: await bcrypt.hash(request.password, 10),
       });
       console.log('logUser', user);
       return user;
@@ -34,22 +29,9 @@ export class UsersService {
 
   private async validateCreateUserRequest(request: CreateUserRequest) {
     let user: User;
-    try {
       user = await this.usersRepository.findOne({
         email: request.email,
       });
-      console.log('findOuser', user);
-    } catch (err) {
-      // console.log('err-1', err);
-      // if (err instanceof NotFoundException) {
-      //   console.log('insidd true');
-      //   return true;
-      // }
-      // throw err;
-      return false;
-    }
-    // Handle the case where the user is not found
-
     if (user) {
       throw new UnprocessableEntityException('Email already exists.');
     } else return true;

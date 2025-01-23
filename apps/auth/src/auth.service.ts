@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { User } from './users/schemas/user.schema';
-import * as bcrypt from 'bcrypt';
 import { UsersService } from './users/users.service';
+const bcrypt = require('bcryptjs');
 
 export interface TokenPayload {
   userId: string;
@@ -44,23 +44,13 @@ export class AuthService {
   }
 
   async register(userData: Partial<User>): Promise<User> {
-    try {
-      const { email, password } = userData;
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-      console.log('email', email);
-      console.log('password', password);
-
-      // const user = await this.userService.createUser({
-      //   email,
-      //   password: hashedPassword,
-      // });
-      // console.log('createdUser', user);
-
-      // return "user";
-      return hashedPassword;
-    } catch(err) {
-      console.log('error', err);
-    }
+    const { email, password } = userData;
+    const hashedPassword = await bcrypt.hashSync(password, 10);
+    const user = await this.userService.createUser({
+      email,
+      password: hashedPassword,
+    });
+    console.log('createdUser', user);
+    return user;
   }
 }
