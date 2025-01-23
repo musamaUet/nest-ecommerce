@@ -49,4 +49,8 @@ export class UsersService {
   async getUser(getUserArgs: Partial<User>) {
     return this.usersRepository.findOne(getUserArgs);
   }
+
+  async findUserByEmail(email: string) {
+    return this.usersRepository.findOne({email});
+  }
 }

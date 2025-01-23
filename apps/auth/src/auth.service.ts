@@ -18,7 +18,11 @@ export class AuthService {
     private readonly userService: UsersService,
   ) {}
 
-  async login(user: User, response: Response) {
+  async login(userData: Partial<User>, response: Response) {
+    const user = await this.userService.findUserByEmail(userData.email);
+
+    console.log('user', user);
+
     const tokenPayload: TokenPayload = {
       userId: user._id.toHexString(),
     };
@@ -34,6 +38,7 @@ export class AuthService {
       httpOnly: true,
       expires,
     });
+    return { token, user }
   }
 
   logout(response: Response) {

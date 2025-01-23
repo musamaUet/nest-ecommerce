@@ -11,15 +11,15 @@ import { User } from './users/schemas/user.schema';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
-    @CurrentUser() user: User,
-    @Res({ passthrough: true }) response: Response,
+    @Body() userData: Partial<User>,
+    @Res() response: Response,
   ) {
-    await this.authService.login(user, response);
-    console.log('user', user);
-    response.send(user);
+    const user = await this.authService.login(userData, response);
+    console.log('user', userData);
+    response.status(200).json({ user });
   }
 
   @Post('register')
