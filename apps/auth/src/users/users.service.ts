@@ -13,12 +13,23 @@ export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async createUser(request: CreateUserRequest) {
-    await this.validateCreateUserRequest(request);
-    const user = await this.usersRepository.create({
-      ...request,
-      password: await bcrypt.hash(request.password, 10),
-    });
-    return user;
+    const validatedReq = await this.validateCreateUserRequest(request);
+    try {
+      console.log('inside try');
+      // const user = await this.usersRepository.create({
+      //   ...request,
+      //   password: await bcrypt.hash(request.password, 10),
+      // });
+      const user = await this.usersRepository.create({
+        ...request,
+        password: "usama",
+      });
+      console.log('logUser', user);
+      return user;
+    } catch(err) {
+      console.log('logError', err);
+    }
+
   }
 
   private async validateCreateUserRequest(request: CreateUserRequest) {
@@ -27,11 +38,21 @@ export class UsersService {
       user = await this.usersRepository.findOne({
         email: request.email,
       });
-    } catch (err) {}
+      console.log('findOuser', user);
+    } catch (err) {
+      // console.log('err-1', err);
+      // if (err instanceof NotFoundException) {
+      //   console.log('insidd true');
+      //   return true;
+      // }
+      // throw err;
+      return false;
+    }
+    // Handle the case where the user is not found
 
     if (user) {
       throw new UnprocessableEntityException('Email already exists.');
-    }
+    } else return true;
   }
 
   async validateUser(email: string, password: string) {
