@@ -12,20 +12,20 @@ export class OrdersService {
     @Inject(BILLING_SERVICE) private billingClient: ClientProxy,
   ) {}
 
-  async createOrder(request: CreateOrderRequest, authentication: string) {
-    const session = await this.ordersRepository.startTransaction();
+  async createOrder(request: CreateOrderRequest, user: any) {
+    // const session = await this.ordersRepository.startTransaction();
     try {
-      const order = await this.ordersRepository.create(request, { session });
+      const order = await this.ordersRepository.create(request);
       await lastValueFrom(
         this.billingClient.emit('order_created', {
           request,
-          Authentication: authentication,
+          Authentication: user.token,
         }),
       );
-      await session.commitTransaction();
+      // await session.commitTransaction();
       return order;
     } catch (err) {
-      await session.abortTransaction();
+      // await session.abortTransaction();
       throw err;
     }
   }

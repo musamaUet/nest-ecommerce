@@ -18,6 +18,7 @@ export class BillingController {
   @EventPattern('order_created')
   @UseGuards(JwtAuthGuard)
   async handleOrderCreated(@Payload() data: any, @Ctx() context: RmqContext) {
+    console.log('queue-data', data);
     this.billingService.bill(data);
     this.rmqService.ack(context);
   }

@@ -23,7 +23,7 @@ export class JwtAuthGuard implements CanActivate {
       })
       .pipe(
         tap((res) => {
-          this.addUser(res, context);
+          this.addUser(res, context, authentication);
         }),
         catchError(() => {
           throw new UnauthorizedException();
@@ -53,11 +53,12 @@ export class JwtAuthGuard implements CanActivate {
     return authentication;
   }
 
-  private addUser(user: any, context: ExecutionContext) {
+  private addUser(user: any, context: ExecutionContext, token: string) {
     if (context.getType() === 'rpc') {
       context.switchToRpc().getData().user = user;
     } else if (context.getType() === 'http') {
       context.switchToHttp().getRequest().user = user;
+      context.switchToHttp().getRequest().user.token = token;
     }
   }
 }
