@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { OrdersModule } from './orders.module';
 
 async function bootstrap() {
+  console.log('OrdersModule Called');
   const app = await NestFactory.create(OrdersModule);
   app.useGlobalPipes(new ValidationPipe());
   const configService = app.get(ConfigService);

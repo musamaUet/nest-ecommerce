@@ -19,7 +19,7 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
         "start:auth": "nest start auth",
-        "start:orders": "nest start orders",
+        "start:orders": "nest start orders --watch",
         "build:auth": "nest build auth",
         "build:orders": "nest build orders"
     },
