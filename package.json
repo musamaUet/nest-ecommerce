@@ -20,6 +20,8 @@
         "test:e2e": "jest --config ./test/jest-e2e.json",
         "start:auth": "nest start auth",
         "start:orders": "nest start orders --watch",
+        "start:billing": "nest start billing --watch",
+        "build:billing": "nest build billing",
         "build:auth": "nest build auth",
         "build:orders": "nest build orders"
     },

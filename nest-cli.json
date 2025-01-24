@@ -2,7 +2,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "apps/orders/src",
   "monorepo": true,
-  "root": "apps/orders",
+  "root": "apps/",
   "compilerOptions": {
     "webpack": true,
     "tsConfigPath": "apps/orders/tsconfig.build.json"
