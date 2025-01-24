@@ -5,7 +5,7 @@
   "root": "apps/",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/orders/tsconfig.build.json"
+    "tsConfigPath": "apps/orders/tsconfig.app.json"
   },
   "projects": {
     "orders": {
@@ -14,7 +14,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/orders/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/orders/tsconfig.build.json"
+        "tsConfigPath": "apps/orders/tsconfig.app.json"
       }
     },
     "billing": {
@@ -23,7 +23,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/billing/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/billing/tsconfig.build.json"
+        "tsConfigPath": "apps/billing/tsconfig.app.json"
       }
     },
     "auth": {
@@ -32,7 +32,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/auth/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/auth/tsconfig.build.json"
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
     },
     "common": {
