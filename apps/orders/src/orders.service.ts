@@ -13,7 +13,6 @@ export class OrdersService {
   ) {}
 
   async createOrder(request: CreateOrderRequest, user: any) {
-    // const session = await this.ordersRepository.startTransaction();
     try {
       const order = await this.ordersRepository.create(request);
       await lastValueFrom(
@@ -22,10 +21,8 @@ export class OrdersService {
           Authentication: user.token,
         }),
       );
-      // await session.commitTransaction();
       return order;
     } catch (err) {
-      // await session.abortTransaction();
       throw err;
     }
   }
